@@ -20,6 +20,14 @@ function Instalar($url, $hash, $version) {
     $value = if ($item -eq 'UserDataFolder') { $env:WEBVIEW2_USER_DATA_FOLDER } else { $env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS }
     New-ItemProperty "$pol\$item" -Name 'escriba-app.exe' -Value $value -PropertyType String -Force | Out-Null
   }
+  if ($version -eq '0.1.2') {
+    python voz.py --preparar
+    if ($LASTEXITCODE -ne 0) { throw 'No se pudo verificar el modelo de prueba' }
+    $env:ESCRIBA_MODELS_DIR = Join-Path $env:RUNNER_TEMP 'modelos-escriba'
+    New-Item $env:ESCRIBA_MODELS_DIR -ItemType Directory -Force | Out-Null
+    Copy-Item (Join-Path $env:RUNNER_TEMP 'ggml-tiny.bin') $env:ESCRIBA_MODELS_DIR
+    Start-Service Audiosrv
+  }
   $p = Start-Process $exe -WorkingDirectory $dir -PassThru
   try {
     node comprobar.mjs $version

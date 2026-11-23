@@ -34,6 +34,34 @@ if (version === '0.1.1') {
   await page.getByRole('button',{name:'Grabar',exact:true}).click();
   await page.locator('.toast-error').waitFor();
   await page.getByRole('button',{name:'Grabar',exact:true}).waitFor();
+  const result = await page.evaluate(async () => {
+    const invoke = window.__TAURI_INTERNALS__.invoke;
+    const settings = await invoke('settings_get');
+    await invoke('settings_set', { settings: {...settings, whisperModel:'ggml-tiny.bin', useGpu:false} });
+    const models = await invoke('models_status');
+    if (!models.whisper.present) throw new Error('Falta el modelo de prueba');
+    const meetings = await invoke('meetings_list');
+    const meeting = meetings.find(m => m.title === 'Prueba de actualización');
+    if (!meeting) throw new Error('No se conservó la sesión');
+    let error = '';
+    try {
+      await invoke('recording_start', {meetingId:meeting.id});
+    } catch (e) {
+      error = String(e);
+    }
+    if (!error) {
+      await invoke('recording_stop');
+      for (let i = 0; i < 120 && (await invoke('app_status')).recordingMeeting; i++) {
+        await new Promise(r => setTimeout(r, 250));
+      }
+    }
+    const state = await invoke('app_status');
+    const after = await invoke('models_status');
+    return {error, recording:state.recordingMeeting, sandbox:after.sandbox, launchError:after.launchError};
+  });
+  if (result.error) assert.match(result.error, /No se encontró un micrófono|No se pudo abrir el micrófono|No se pudo iniciar la captura/i);
+  assert.ok(!result.recording && result.sandbox && !result.launchError, JSON.stringify(result));
+  console.log('El motor cargó desde la aplicación instalada.', result.error || 'Grabación iniciada y detenida.');
   await page.getByRole('button',{name:'Registro de diagnóstico'}).click();
   await page.getByRole('textbox',{name:'Eventos técnicos'}).waitFor();
 }

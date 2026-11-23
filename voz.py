@@ -4,10 +4,14 @@ import hashlib
 import os
 from pathlib import Path
 import struct
+import sys
 import subprocess
 import wave
 
 def descargar(url, archivo, sha):
+    if archivo.exists():
+        with archivo.open("rb") as f:
+            if hashlib.file_digest(f, "sha256").hexdigest() == sha: return
     subprocess.run(["curl.exe", "-fsSL", "--retry", "3", url, "-o", str(archivo)], check=True)
     with archivo.open("rb") as entrada:
         assert hashlib.file_digest(entrada, "sha256").hexdigest() == sha, archivo.name
@@ -34,6 +38,8 @@ descargar("https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-tiny.b
           "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21")
 descargar("https://raw.githubusercontent.com/ggml-org/whisper.cpp/master/samples/jfk.wav", voz,
           "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e")
+if "--preparar" in sys.argv:
+    sys.exit(0)
 with wave.open(str(voz), "rb") as wav:
     assert (wav.getframerate(), wav.getnchannels(), wav.getsampwidth()) == (16000, 1, 2)
     valores = array.array("h", wav.readframes(wav.getnframes()))
