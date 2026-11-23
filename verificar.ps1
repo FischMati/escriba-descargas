@@ -20,7 +20,7 @@ function Instalar($url, $hash, $version) {
     $value = if ($item -eq 'UserDataFolder') { $env:WEBVIEW2_USER_DATA_FOLDER } else { $env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS }
     New-ItemProperty "$pol\$item" -Name 'escriba-app.exe' -Value $value -PropertyType String -Force | Out-Null
   }
-  if ($version -eq '0.1.2') {
+  if ($version -eq '0.1.3') {
     python voz.py --preparar
     if ($LASTEXITCODE -ne 0) { throw 'No se pudo verificar el modelo de prueba' }
     $env:ESCRIBA_MODELS_DIR = Join-Path $env:RUNNER_TEMP 'modelos-escriba'
@@ -42,5 +42,5 @@ function Instalar($url, $hash, $version) {
     if (-not $p.HasExited) { taskkill /PID $p.Id /T /F | Out-Null }
   }
 }
-Instalar 'https://9db33000.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '5b52df4bb643a008a6064499327f0e1ec659d9b875c216205a8f59b7ecc3ba50' '0.1.1'
-Instalar 'https://926fff2b.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '559f17e50c7e6594170416d01b5f48faef03a8841eef98bbf7ae53c82ff796c1' '0.1.2'
+Instalar 'https://d607e34b.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '559f17e50c7e6594170416d01b5f48faef03a8841eef98bbf7ae53c82ff796c1' '0.1.2'
+Instalar 'https://bae03e44.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' 'c42515009a8478aefe4c8357fc13a6ab2ad8244d5de0420ae17f323391ee41e5' '0.1.3'

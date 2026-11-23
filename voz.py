@@ -40,6 +40,10 @@ descargar("https://raw.githubusercontent.com/ggml-org/whisper.cpp/master/samples
           "59dfb9a4acb36fe2a2affc14bacbee2920ff435cb13cc314a08c13f66ba7860e")
 if "--preparar" in sys.argv:
     sys.exit(0)
+descargar("https://huggingface.co/csukuangfj/sherpa-onnx-pyannote-segmentation-3-0/resolve/9403a6902bb58e3d5ae8c7e77c3422de279db2e0/model.onnx", temporal / "pyannote-segmentation-3.onnx",
+          "220ad67ca923bef2fa91f2390c786097bf305bceb5e261d4af67b38e938e1079")
+descargar("https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/wespeaker_en_voxceleb_resnet34_LM.onnx", temporal / "wespeaker_en_voxceleb_resnet34_LM.onnx",
+          "e9848563da86f263117134dfd7ad63c92355b37de492b55e325400c9d9c39012")
 with wave.open(str(voz), "rb") as wav:
     assert (wav.getframerate(), wav.getnchannels(), wav.getsampwidth()) == (16000, 1, 2)
     valores = array.array("h", wav.readframes(wav.getnframes()))
@@ -56,5 +60,6 @@ while salida:
     respuestas.append(salida[4:4+largo])
     salida = salida[4+largo:]
 assert len(respuestas) == 2 and respuestas[0][0] == 0 and respuestas[1][0] == 1
+assert respuestas[1][1] == 1 and 0 < respuestas[1][2] < 128 and respuestas[1][3] in (1, 2, 3), "Sin análisis de voces"
 assert b"country" in respuestas[1].lower()
 print("El transcriptor instalado reconoció la grabación de prueba en Windows.")
