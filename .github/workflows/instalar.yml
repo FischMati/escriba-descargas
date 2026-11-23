@@ -1,0 +1,19 @@
+name: Prueba pública del instalador
+on:
+  push:
+    branches: [qa/instalador-windows-0.1.2]
+permissions:
+  contents: read
+jobs:
+  instalar:
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          persist-credentials: false
+      - name: Preparar la prueba en una cuenta nueva
+        run: npm install --no-save --ignore-scripts playwright-core@1.58.2
+      - name: Instalar, abrir la bóveda y verificar la sesión
+        shell: pwsh
+        run: ./verificar.ps1
