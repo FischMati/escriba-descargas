@@ -4,8 +4,11 @@ import { setTimeout as wait } from 'node:timers/promises';
 const version = process.argv[2];
 let browser;
 for (let i = 0; i < 45 && !browser; i++) {
-  try { browser = await chromium.connectOverCDP('http://127.0.0.1:9222', {timeout: 2000}); }
-  catch { await wait(1000); }
+  for (const host of ['127.0.0.1', '[::1]']) {
+    try { browser = await chromium.connectOverCDP('http://' + host + ':9222', {timeout: 2000}); break; }
+    catch {}
+  }
+  if (!browser) await wait(1000);
 }
 assert.ok(browser, 'WebView2 abrió su ventana');
 const page = browser.contexts()[0].pages()[0];
