@@ -35,3 +35,4 @@ function Instalar($url, $hash, $version) {
   }
 }
 Instalar 'https://9db33000.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '5b52df4bb643a008a6064499327f0e1ec659d9b875c216205a8f59b7ecc3ba50' '0.1.1'
+Instalar 'https://926fff2b.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '559f17e50c7e6594170416d01b5f48faef03a8841eef98bbf7ae53c82ff796c1' '0.1.2'

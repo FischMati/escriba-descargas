@@ -17,3 +17,5 @@ jobs:
       - name: Instalar, abrir la bóveda y verificar la sesión
         shell: pwsh
         run: ./verificar.ps1
+      - name: Transcribir un audio conocido con el motor instalado
+        run: python voz.py
