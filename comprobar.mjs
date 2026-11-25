@@ -64,9 +64,20 @@ if (version === '0.1.4') {
   console.log('El motor cargó desde la aplicación instalada.', result.error || 'Grabación iniciada y detenida.');
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
   await page.getByRole('button',{name:'Mi cuenta'}).click();
+  const appearance = page.getByLabel('Apariencia');
+  await appearance.selectOption('light');
+  assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
+  await appearance.selectOption('dark');
   await page.getByRole('button',{name:'Registro de diagnóstico'}).click();
   await page.getByText("Ver el texto que vas a copiar").click();
   await page.getByRole('textbox',{name:'Eventos técnicos'}).waitFor();
+  await page.getByRole('dialog').locator('button[aria-label="Cerrar"]').click();
+  await page.getByRole('button',{name:'Sesiones',exact:true}).click();
+  await page.getByRole('button',{name:'Vincular a otra persona',exact:true}).click();
+  const pairing = page.getByRole('dialog',{name:'Vincular a otra persona'});
+  await pairing.getByRole('button',{name:'Tengo un código'}).click();
+  await pairing.getByPlaceholder('XXXXX-XXXXX-XXXXX-XXXXX').waitFor();
+  console.log('Índice conserva el acceso a contactos, apariencia y diagnóstico.');
 }
 console.log('Verificación completa', version);
 await browser.close();
