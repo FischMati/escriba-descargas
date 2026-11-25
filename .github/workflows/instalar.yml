@@ -1,7 +1,7 @@
 name: Prueba pública del instalador
 on:
   push:
-    branches: [qa/instalador-windows-0.1.3]
+    branches: [qa/instalador-windows-0.1.5]
 permissions:
   contents: read
 jobs:

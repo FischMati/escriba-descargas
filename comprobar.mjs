@@ -14,7 +14,7 @@ assert.ok(browser, 'WebView2 abrió su ventana');
 const page = browser.contexts()[0].pages()[0];
 const name = 'Prueba de actualización';
 const pass = 'Esta bóveda es de prueba 2026';
-if (version === '0.1.2') {
+if (version === '0.1.4') {
   await page.getByPlaceholder('Ej.: Laura Ruiz').fill('Prueba');
   await page.locator('input[type=password]').nth(0).fill(pass);
   await page.locator('input[type=password]').nth(1).fill(pass);
@@ -62,6 +62,8 @@ if (version === '0.1.2') {
   if (result.error) assert.match(result.error, /No se encontró un micrófono|No se pudo abrir el micrófono|No se pudo iniciar la captura/i);
   assert.ok(!result.recording && result.sandbox && !result.launchError, JSON.stringify(result));
   console.log('El motor cargó desde la aplicación instalada.', result.error || 'Grabación iniciada y detenida.');
+  assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
+  await page.getByRole('button',{name:'Mi cuenta'}).click();
   await page.getByRole('button',{name:'Registro de diagnóstico'}).click();
   await page.getByText("Ver el texto que vas a copiar").click();
   await page.getByRole('textbox',{name:'Eventos técnicos'}).waitFor();
