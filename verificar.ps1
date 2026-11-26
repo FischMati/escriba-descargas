@@ -43,4 +43,4 @@ function Instalar($url, $hash, $version) {
   }
 }
 Instalar 'https://github.com/FischMati/escriba-descargas/releases/download/v0.1.5/Escriba_0.1.5_x64-setup.exe' '5f306e55c9ee39f942cbe61c7e27d01ec5fd48461fda3be737ea08adc3b9bbcc' '0.1.5'
-Instalar 'https://revision-016.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' 'f5901c8fec5c3c84a07eda43a80f22c011f7a87081cf0f044d931f929873723b' '0.1.6'
+Instalar 'https://6314b35b.escriba-72v.pages.dev/descargas/Escriba-Windows-x64.exe' '15efb3b3d70c41ae205ede5e573a3c5c997daa9f2b8f7b198371bdbdd8a53c3f' '0.1.6'
