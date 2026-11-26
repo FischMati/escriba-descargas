@@ -48,9 +48,11 @@ with wave.open(str(voz), "rb") as wav:
     assert (wav.getframerate(), wav.getnchannels(), wav.getsampwidth()) == (16000, 1, 2)
     valores = array.array("h", wav.readframes(wav.getnframes()))
 pcm = array.array("f", (v / 32768.0 for v in valores))
+# Primero la lectura provisional, luego la transcripción confirmada del mismo audio.
+audio = entero(len(pcm)) + pcm.tobytes() + b"\x00\x01" + texto("en") + b"\x00"
 solicitudes = (trama(b"\x00" + texto(str(modelo)) + b"\x00") +
-               trama(b"\x01\x01" + entero(len(pcm)) + pcm.tobytes() + b"\x00\x01" + texto("en") + b"\x00") +
-               trama(b"\x02"))
+               trama(b"\x03\x02" + audio) +
+               trama(b"\x01\x01" + audio) + trama(b"\x02"))
 worker = Path(os.environ["LOCALAPPDATA"]) / "Escriba" / "escriba-asr-worker.exe"
 salida = subprocess.run([str(worker)], input=solicitudes, stdout=subprocess.PIPE, check=True, timeout=180).stdout
 respuestas = []
@@ -59,7 +61,11 @@ while salida:
     assert 0 < largo <= len(salida) - 4
     respuestas.append(salida[4:4+largo])
     salida = salida[4+largo:]
-assert len(respuestas) == 2 and respuestas[0][0] == 0 and respuestas[1][0] == 1
-assert respuestas[1][1] == 1 and 0 < respuestas[1][2] < 128 and respuestas[1][3] in (1, 2, 3), "Sin análisis de voces"
-assert b"country" in respuestas[1].lower()
-print("El transcriptor instalado reconoció la grabación de prueba en Windows.")
+assert len(respuestas) == 3 and respuestas[0][0] == 0
+provisional, confirmada = respuestas[1:]
+assert provisional[:2] == bytes([1, 2]) and 0 < provisional[2] < 128
+assert provisional[3] == 0, "La lectura provisional no debe asignar una voz"
+assert confirmada[:2] == bytes([1, 1]) and 0 < confirmada[2] < 128
+assert confirmada[3] in (1, 2, 3), "Sin análisis de voces"
+assert b"country" in confirmada.lower()
+print("Windows mostró texto provisional y confirmó la grabación con análisis de voces.")
