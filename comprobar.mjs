@@ -14,7 +14,7 @@ assert.ok(browser, 'WebView2 abrió su ventana');
 const page = browser.contexts()[0].pages()[0];
 const name = 'Prueba de actualización';
 const pass = 'Esta bóveda es de prueba 2026';
-if (version === '0.1.7') {
+if (version === '0.1.8') {
   await page.getByPlaceholder('Ej.: Laura Ruiz').fill('Prueba');
   await page.locator('input[type=password]').nth(0).fill(pass);
   await page.locator('input[type=password]').nth(1).fill(pass);
