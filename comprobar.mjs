@@ -14,7 +14,7 @@ assert.ok(browser, 'WebView2 abrió su ventana');
 const page = browser.contexts()[0].pages()[0];
 const name = 'Prueba de actualización';
 const pass = 'Esta bóveda es de prueba 2026';
-if (version === '0.1.4') {
+if (version === '0.1.5') {
   await page.getByPlaceholder('Ej.: Laura Ruiz').fill('Prueba');
   await page.locator('input[type=password]').nth(0).fill(pass);
   await page.locator('input[type=password]').nth(1).fill(pass);
@@ -25,6 +25,7 @@ if (version === '0.1.4') {
   await page.getByPlaceholder('Ej.: Reunión con Juan').fill(name);
   await page.getByRole('button',{name:'Crear sesión'}).click();
   await page.getByRole('heading',{name}).waitFor();
+  await page.getByRole('button',{name:'Mi cuenta'}).click();
   await page.getByRole('button',{name:'Bloquear',exact:true}).click();
 } else {
   await page.locator('input[type=password]').fill(pass);
@@ -69,8 +70,8 @@ if (version === '0.1.4') {
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'light');
   await appearance.selectOption('dark');
   await page.getByRole('button',{name:'Registro de diagnóstico'}).click();
-  await page.getByText("Ver el texto que vas a copiar").click();
-  await page.getByRole('textbox',{name:'Eventos técnicos'}).waitFor();
+  assert.equal(await page.getByText('Ver el texto que vas a copiar').count(), 0);
+  await page.getByRole('button', {name:'Copiar registro'}).waitFor();
   await page.getByRole('dialog').locator('button[aria-label="Cerrar"]').click();
   await page.getByRole('button',{name:'Sesiones',exact:true}).click();
   await page.getByRole('button',{name:'Vincular a otra persona',exact:true}).click();
