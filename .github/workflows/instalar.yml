@@ -1,7 +1,7 @@
-name: Prueba pública del instalador
+name: Actualizar desde la app
 on:
   push:
-    branches: [qa/instalador-windows-0.1.9]
+    branches: [qa/actualizacion-desde-la-app-0.1.10]
 permissions:
   contents: read
 jobs:
@@ -17,5 +17,3 @@ jobs:
       - name: Instalar, abrir la bóveda y verificar la sesión
         shell: pwsh
         run: ./verificar.ps1
-      - name: Transcribir un audio conocido con el motor instalado
-        run: python voz.py
