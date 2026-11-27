@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
-$version = '0.1.10'
-$url = 'https://github.com/FischMati/escriba-descargas/releases/download/v0.1.10/Escriba_0.1.10_x64-setup.exe'
-$hash = '61c26a0212a800ca7a66a7593752a961711fe5c06ebfe6442c200bc07d6f648f'
+$version = '0.1.11'
+$url = 'https://github.com/FischMati/escriba-descargas/releases/download/v0.1.11/Escriba_0.1.11_x64-setup.exe'
+$hash = '0521946dc7db627a3bd7a4e2773fa93fcd17515c7d4999285218bcbe46fb48f6'
   $setup = Join-Path $env:RUNNER_TEMP "Escriba-$version.exe"
   Invoke-WebRequest $url -OutFile $setup
   if ((Get-FileHash $setup -Algorithm SHA256).Hash -ne $hash) { throw 'Cambió el instalador' }
@@ -26,4 +26,4 @@ $hash = '61c26a0212a800ca7a66a7593752a961711fe5c06ebfe6442c200bc07d6f648f'
   Start-Process $exe -WorkingDirectory $dir
   node comprobar.mjs
   if ($LASTEXITCODE -ne 0) { throw 'Falló la actualización o no se conservó la sesión' }
-  if ((Get-Item $exe).VersionInfo.ProductVersion -notlike '0.1.11*') { throw 'No se instaló la versión publicada' }
+  if ((Get-Item $exe).VersionInfo.ProductVersion -notlike '0.1.12*') { throw 'No se instaló la versión publicada' }
