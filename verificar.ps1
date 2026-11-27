@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
-$version = '0.1.10-1'
-$url = 'https://e084fbf7.escriba-72v.pages.dev/ensayo/inicial-windows.exe'
-$hash = '19436254e3283f3ace505ac29ac63b4a2558530b614de9f50e838f1bc1ac24e6'
+$version = '0.1.10'
+$url = 'https://github.com/FischMati/escriba-descargas/releases/download/v0.1.10/Escriba_0.1.10_x64-setup.exe'
+$hash = '61c26a0212a800ca7a66a7593752a961711fe5c06ebfe6442c200bc07d6f648f'
   $setup = Join-Path $env:RUNNER_TEMP "Escriba-$version.exe"
   Invoke-WebRequest $url -OutFile $setup
   if ((Get-FileHash $setup -Algorithm SHA256).Hash -ne $hash) { throw 'Cambió el instalador' }
@@ -26,4 +26,4 @@ $hash = '19436254e3283f3ace505ac29ac63b4a2558530b614de9f50e838f1bc1ac24e6'
   Start-Process $exe -WorkingDirectory $dir
   node comprobar.mjs
   if ($LASTEXITCODE -ne 0) { throw 'Falló la actualización o no se conservó la sesión' }
-  if ((Get-Item $exe).VersionInfo.ProductVersion -notlike '0.1.10*') { throw 'No se instaló la versión publicada' }
+  if ((Get-Item $exe).VersionInfo.ProductVersion -notlike '0.1.11*') { throw 'No se instaló la versión publicada' }

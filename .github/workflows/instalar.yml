@@ -1,7 +1,7 @@
 name: Actualizar desde la app
 on:
   push:
-    branches: [qa/actualizacion-desde-la-app-0.1.10]
+    branches: [qa/actualizacion-desde-la-app-0.1.11]
 permissions:
   contents: read
 jobs:

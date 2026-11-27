@@ -16,7 +16,7 @@ async function connectVersion(version) {
   }
   throw Error('La app no abrió la versión '+version);
 }
-const page=await connectVersion('0.1.10-1');
+const page=await connectVersion('0.1.10');
 const pass='Esta bóveda es de prueba 2026';
 const name='Prueba de actualización';
 
@@ -34,14 +34,14 @@ const name='Prueba de actualización';
   await page.getByRole('button',{name:'Bloquear',exact:true}).click();
 
 await page.getByRole('button',{name:'Buscar actualizaciones'}).click();
-const update=page.getByRole('button',{name:'Actualizar a 0.1.10 y reiniciar'});
+const update=page.getByRole('button',{name:'Actualizar a 0.1.11 y reiniciar'});
 await update.waitFor({timeout:50000});
 await update.click();
 console.log('Actualización solicitada desde la app');
-const next=await connectVersion('0.1.10');
+const next=await connectVersion('0.1.11');
 await next.locator('input[type=password]').fill(pass);
 await next.getByRole('button',{name:'Desbloquear',exact:true}).click();
 await next.getByRole('button',{name:new RegExp(name)}).first().click();
 await next.getByRole('heading',{name}).waitFor();
-console.log('El instalador firmado reinició Escriba 0.1.10 y la bóveda conservó su sesión.');
+console.log('El instalador firmado reinició Escriba 0.1.11 y la bóveda conservó su sesión.');
 process.exit(0);
